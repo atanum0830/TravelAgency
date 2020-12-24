@@ -8,12 +8,13 @@ export function NavBarComponent() {
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <a className="navbar-brand" href="home">Monarch Travels</a>
+                <a className="navbar-brand" href="home"><i className="fa fa-trophy"></i>Monarch Travels</a>
+                {/* <img src="images/crown.jpg"/> */}
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <div className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <a className="nav-link active" aria-current="page" href="tours">Tours</a>
-                        <a className="nav-link active" href="bookings">Bookings</a>
-                        <a className="nav-link" href="customers">Customers</a>
+                        <a className="nav-link active" aria-current="page" href="tours"><i className="fa fa-plane"></i>Tours</a>
+                        <a className="nav-link active" href="bookings"><i className="fa fa-address-card"></i>Bookings</a>
+                        <a className="nav-link" href="customers"><i className="fa fa-users"></i>Customers</a>
                         <a className="nav-link disabled" href="home" tabIndex="-1" aria-disabled="true">Disabled</a>
                         <div className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="home">
@@ -29,12 +30,12 @@ export function NavBarComponent() {
                 </div>
 
                 <form className="d-flex">
-                    <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                    <input className="form-control form-control-sm me-2" type="search" placeholder="Search" aria-label="Search"/>
                     <button className="mx-2 btn btn-sm btn-secondary" type="button">Search</button>
                 </form>
                 <div className="navbar-nav me-auto mb-2 mb-lg-0">
-                    <a className="nav-link active" href="contact">Contact Us</a>
-                    <a className="nav-link btn btn-sm btn-secondary" href="login">Login</a>
+                    <a className="nav-link active" href="contact"><i className="fa fa-phone"></i>Contact Us</a>
+                    <a className="nav-link active" href="login"><i className="fa fa-user"></i>Login</a>
                 </div>
             </div>
         </nav>

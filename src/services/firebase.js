@@ -2,14 +2,13 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyChO4ixlpjEZ0LfP-y2zrRf2nY049OssC8",
-    authDomain: "rentwebsite1.firebaseapp.com",
-    databaseURL: "https://rentwebsite1.firebaseio.com",
-    projectId: "rentwebsite1",
-    storageBucket: "rentwebsite1.appspot.com",
-    messagingSenderId: "629420365792",
-    appId: "1:629420365792:web:f9adbae90babbd06667d85",
-    measurementId: "G-QNFDH3R0MX"
+    apiKey: "AIzaSyDUBhMmy7vbrHpAYSxdH8yrcyYEwGDBz24",
+    authDomain: "monarchtravels-9ed67.firebaseapp.com",
+    projectId: "monarchtravels-9ed67",
+    storageBucket: "monarchtravels-9ed67.appspot.com",
+    messagingSenderId: "283563375791",
+    appId: "1:283563375791:web:85c0c21de41334e7dc685a",
+    measurementId: "G-S737E65BHJ"
   };
 
   firebase.initializeApp(firebaseConfig);
