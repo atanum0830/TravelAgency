@@ -11,14 +11,15 @@ import { NoMatchComponent } from './components/no-match';
 import { TourComponent } from './components/tours';
 
 function App() {
-  const tours = [];
-  const bookings = [];
-  const customers = [];
+  const [tours, setTours] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [customers, setCustomers] = useState([]);
 
   const toursRef = firebase.firestore().collection('tours');
-  // const tenantRef = firebase.firestore().collection('tenants');
+  const bookingsRef = firebase.firestore().collection('bookings');
+  const customersRef = firebase.firestore().collection('customers');
 
-  useEffect(() => {
+  const loadTours = () => {
     toursRef.onSnapshot((querySnapshot) => {
       const items = [];
       querySnapshot.forEach((doc) => {
@@ -26,8 +27,41 @@ function App() {
         item.id = doc.id;
         items.push(item);
       });
-    });
 
+      setTours(items);
+    });
+  }
+
+  const loadBookings = () => {
+    bookingsRef.onSnapshot((querySnapshot) => {
+      const items = [];
+      querySnapshot.forEach((doc) => {
+        const item = doc.data();
+        item.id = doc.id;
+        items.push(item);
+      });
+
+      setBookings(items);
+    });
+  }
+
+  const loadCustomers = () => {
+    customersRef.onSnapshot((querySnapshot) => {
+      const items = [];
+      querySnapshot.forEach((doc) => {
+        const item = doc.data();
+        item.id = doc.id;
+        items.push(item);
+      });
+
+      setCustomers(items);
+    });
+  }
+
+  useEffect(() => {
+    loadTours();
+    loadBookings();
+    // loadCustomers();
   });
 
   return (
