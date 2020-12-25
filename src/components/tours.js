@@ -75,11 +75,11 @@ export function TourComponent(props) {
       <tr key={index}>
         <td>{tour.tourId}</td>
         <td>{tour.name}</td>
-        <td><i className="mx-2 fa fa-trash" aria-hidden="true" onClick={() => {
+        <td><i className="mx-2 fa fa-trash" style={{color: "red"}} aria-hidden="true" onClick={() => {
               // handleDeleteTour(tour, index);
             }}
           ></i>
-          <i className="mx-2 fa fa-pencil-square" aria-hidden="true" onClick={() => {
+          <i className="mx-2 far fa-edit" style={{color: "blue"}} aria-hidden="true" onClick={() => {
               // handleEditTour(tour);
             }}
           ></i>
@@ -94,7 +94,7 @@ export function TourComponent(props) {
       <Card.Body>
         <Card.Title>
           <div className="row">
-            <div className="col">Tour Information</div>
+            <div className="col">Upcoming Tours</div>
             <div className="col">
               <button type="submit" className="btn btn-primary" onClick={handleAddNewTour}>
                 <i className="fa fa-plus-circle" aria-hidden="true"></i> New Tour</button>

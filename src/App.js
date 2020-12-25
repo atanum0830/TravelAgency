@@ -20,6 +20,7 @@ function App() {
   const customersRef = firebase.firestore().collection('customers');
 
   const loadTours = () => {
+    console.log('loadTours called');
     toursRef.onSnapshot((querySnapshot) => {
       const items = [];
       querySnapshot.forEach((doc) => {
@@ -62,7 +63,7 @@ function App() {
     loadTours();
     loadBookings();
     // loadCustomers();
-  });
+  }, []);
 
   return (
     <React.Fragment>
