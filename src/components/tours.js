@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Table, Card, Button, FormControl, InputGroup } from 'react-bootstrap';
 import { format } from 'date-fns';
 import Pagination from './pagination';
+import { Handler } from './handler';
+import { TourRec } from '../model/all-classes';
 
 export function TourComponent(props) {
     console.log(props);
@@ -18,15 +20,8 @@ export function TourComponent(props) {
      * Generic Event handler for any Text field change
      */
     const handleTextChange = (e) => {
-        const detail = { ...detailRecord };
-        const { name, value } = e.target;
-        detail[name] = value;
-        if (!isNewRecord) {
-            const vo = detail.vo;
-            vo[name] = value;
-        }
-
-        console.log("handletextChange >>>>>", e, name, value, detail);
+        const handler = new Handler(e, detailRecord, isNewRecord);
+        const detail = handler.handleTextChange();
         setDetailRecord(detail);
     };
 
@@ -55,7 +50,7 @@ export function TourComponent(props) {
      */
     const handleDeleteRecord = (record, index) => {
         if (record === detailRecord) {
-        setDetailRecord(props.records[0]);
+            setDetailRecord(props.records[0]);
         }
 
         props.remove(record);
@@ -66,16 +61,8 @@ export function TourComponent(props) {
      */
     const handleAddNewRecord = () => {
         setIsNewRecord(true);
-        setDetailRecord({
-        name: "",
-        email: "",
-        cosigner: "",
-        address: "",
-        address2: "",
-        city: "",
-        zip: "",
-        creditApproved: false,
-        });
+        const detail = new TourRec({});
+        setDetailRecord(detail);
     };
 
     /**
@@ -85,12 +72,12 @@ export function TourComponent(props) {
         event.preventDefault();
 
         if (isNewRecord) {
-        const seqNo = lastSeqNo + 1;
-        detailRecord.tourId = seqNo;
-        setLastSeqNo(seqNo);
-        props.add(detailRecord);
+            const seqNo = lastSeqNo + 1;
+            detailRecord.tourId = seqNo;
+            setLastSeqNo(seqNo);
+            props.add(detailRecord);
         } else {
-        props.update(detailRecord);
+            props.update(detailRecord);
         }
     };
 
@@ -138,7 +125,7 @@ export function TourComponent(props) {
         const row = (
         <tr key={index}>
             <td>{format(record.startDate.toDate(), 'dd-MMM-yyyy')}</td>
-            <td>{record.name}</td>
+            <td style={{maxWidth: "150px"}}>{record.name}</td>
             <td>
                 <i className="mx-2 fas fa-binoculars" style={{color: "MediumBlue"}} aria-hidden="true" 
                     onClick={() => {
@@ -227,25 +214,25 @@ export function TourComponent(props) {
                 <div className="form-check col-md-2 mx-2">
                     <input name="mealPlan" type="checkbox" className="form-check-input px-0" id="inputMealPlan"
                         checked={detailRecord.mealPlan ? detailRecord.mealPlan : false} onChange={handleTextChange}></input>
-                    <label class="form-check-label" for="inputMealPlan">Meal Included</label>
+                    <label className="form-check-label" for="inputMealPlan">Meal Included</label>
                 </div>
 
                 <div className="form-check col-md-3">
                     <input name="hotel" type="checkbox" className="form-check-input px-0" id="inputHotel"
                         checked={detailRecord.hotel ? detailRecord.hotel : false} onChange={handleTextChange}></input>
-                    <label class="form-check-label" for="inputHotel">Hotel Included</label>
+                    <label className="form-check-label" for="inputHotel">Hotel Included</label>
                 </div>
 
                 <div className="form-check col-md-3">
                     <input name="group" type="checkbox" className="form-check-input px-0" id="inputGroup"
                         checked={detailRecord.groupTour ? detailRecord.groupTour : false} onChange={handleTextChange}></input>
-                    <label class="form-check-label" for="inputGroup">Private Tour</label>
+                    <label className="form-check-label" for="inputGroup">Private Tour</label>
                 </div>
 
                 <div className="form-group col-md-3">
                     <input name="conducted" type="checkbox" className="form-check-input px-0" id="inputConducted"
                         checked={detailRecord.conducted ? detailRecord.conducted : false} onChange={handleTextChange}></input>
-                    <label class="form-check-label" for="inputConducted">Conducted Tour</label>
+                    <label className="form-check-label" for="inputConducted">Conducted Tour</label>
                 </div>
             </div>
 

@@ -10,6 +10,7 @@ import { HomeComponent } from './components/home';
 import { NavBarComponent } from './components/navigation';
 import { NoMatchComponent } from './components/no-match';
 import { TourComponent } from './components/tours';
+import { TourRec } from './model/all-classes';
 
 function App() {
   const toursRef = firebase.firestore().collection('tours');
@@ -22,11 +23,24 @@ function App() {
   const [loadedTours, setLoadedTours] = useState(false);
   const [loadedBookings, setLoadedBookings] = useState(false);
 
+  const updateTour = (tour) => {
+    dataService.updateRecord(toursRef, tour);
+  };
+
+  const removeTour = (tour) => {
+    dataService.deleteRecord(toursRef, tour);
+  };
+
+  const addTour = (tour) => {
+    dataService.insertRecord(toursRef, tour);
+  };
+
   const loadTours = () => {
     console.log('loadTours called');
-    toursRef.onSnapshot((querySnapshot) => {
+    toursRef.orderBy('startDate').onSnapshot((querySnapshot) => {
       const documents = dataService.fetchSnapshotDocs(querySnapshot);
-      setTours(documents);
+      const tours = documents.map(document => new TourRec(document));
+      setTours(tours);
       setLoadedTours(true);
     });
   }
@@ -58,7 +72,10 @@ function App() {
       <Router>
         <Switch>
           <Route exact path='/' component={HomeComponent} />
-          <Route path='/tours' render={(props) => <TourComponent records={tours} loaded={loadedTours} />} />
+          <Route path='/tours' render={(props) => (
+              <TourComponent records={tours} loaded={loadedTours} 
+                update={updateTour} remove={removeTour} add={addTour} />
+            )} />
           <Route path='/bookings' render={(props) => <BookingComponent bookings={bookings} loaded={loadedBookings}/>} />
           <Route path='/customers' render={(props) => <CustomerComponent customers={customers} />} />
           <Route component={NoMatchComponent} />

@@ -1,42 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import firebase from './firebase';
 
 class DataService {
-    toursRef = firebase.firestore().collection('tours');
-    bookingsRef = firebase.firestore().collection('bookings');
-    customersRef = firebase.firestore().collection('customers');
-    tours = [];
-    bookings = [];
-    customers = [];
+    // toursRef = firebase.firestore().collection('tours');
+    // bookingsRef = firebase.firestore().collection('bookings');
+    // customersRef = firebase.firestore().collection('customers');
 
-    getAllTours() {
-        this.getAllDocuments(this.toursRef, this.tours);
-    }
-
-    getAllBookings() {
-        this.getAllDocuments(this.bookingsRef, this.bookings);
-    }
-
-    getAllCustomers() {
-        this.getAllDocuments(this.customersRef, this.customers);
-    }
-
-    getAllDocuments(collRef, documents) {
-        const items = [];
-
-        const xthis = this;
-
-        collRef.onSnapshot((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              const item = doc.data();
-              item.id = doc.id;
-              items.push(item);
+    insertRecord(collRef, item) {
+        collRef.add(item)
+            .then((resp) => {
+                console.log("insertRecord >>>> firestore inserted", item);
+            })
+            .catch((error) => {
+                console.log(error);
             });
+    }
 
-            documents = [...items];
-        });
+    updateRecord(collRef, item) {
+        console.log("updateRecord >>>> updating Firestore", item);
+        collRef.doc(item.id)
+            .update(item.vo)
+            .then((resp) => {
+                console.log("updateRecord >>>> firestore updated; resetting vo", item);
+                item.vo = {};
+            })
+            .catch((error) => {
+                console.log(error);
+            }); 
+    }
 
-        // return items;
+    deleteRecord(collRef, item) {
+        collRef.doc(item.id)
+            .delete()
+            .then((resp) => {
+                console.log("deleteRecord >>>> firestore removed", item);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+  
     }
 
     fetchSnapshotDocs(querySnapshot) {
@@ -45,6 +45,7 @@ class DataService {
         querySnapshot.forEach((doc) => {
             const item = doc.data();
             item.id = doc.id;
+            item.vo = {};
             items.push(item);
         });
 
