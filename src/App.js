@@ -19,12 +19,15 @@ function App() {
   const [tours, setTours] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [loadedTours, setLoadedTours] = useState(false);
+  const [loadedBookings, setLoadedBookings] = useState(false);
 
   const loadTours = () => {
     console.log('loadTours called');
     toursRef.onSnapshot((querySnapshot) => {
       const documents = dataService.fetchSnapshotDocs(querySnapshot);
       setTours(documents);
+      setLoadedTours(true);
     });
   }
 
@@ -32,6 +35,7 @@ function App() {
     bookingsRef.onSnapshot((querySnapshot) => {
       const documents = dataService.fetchSnapshotDocs(querySnapshot);
       setBookings(documents);
+      setLoadedBookings(true);
     });
   }
 
@@ -54,8 +58,8 @@ function App() {
       <Router>
         <Switch>
           <Route exact path='/' component={HomeComponent} />
-          <Route path='/tours' render={(props) => <TourComponent records={tours} />} />
-          <Route path='/bookings' render={(props) => <BookingComponent bookings={bookings} />} />
+          <Route path='/tours' render={(props) => <TourComponent records={tours} loaded={loadedTours} />} />
+          <Route path='/bookings' render={(props) => <BookingComponent bookings={bookings} loaded={loadedBookings}/>} />
           <Route path='/customers' render={(props) => <CustomerComponent customers={customers} />} />
           <Route component={NoMatchComponent} />
         </Switch>

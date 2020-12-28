@@ -1,14 +1,98 @@
 import React, { useState } from 'react';
 import { Table, Card, Button, FormControl, InputGroup } from 'react-bootstrap';
+import { format } from 'date-fns';
 import Pagination from './pagination';
 
 export function TourComponent(props) {
     console.log(props);
 
+    const [isNewRecord, setIsNewRecord] = useState(false); //true for add mode, false for update/edit mode
     const [pageRecords, setPageRecords] = useState([]); // array of records in a specific page (3 such records)
     const [detailRecord, setDetailRecord] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
+    const [lastSeqNo, setLastSeqNo] = useState(0);
     const recordsPerPage = 3;
+    const isEmpty = (o) => !o || Object.keys(o).length === 0;
+
+    /**
+     * Generic Event handler for any Text field change
+     */
+    const handleTextChange = (e) => {
+        const detail = { ...detailRecord };
+        const { name, value } = e.target;
+        detail[name] = value;
+        if (!isNewRecord) {
+            const vo = detail.vo;
+            vo[name] = value;
+        }
+
+        console.log("handletextChange >>>>>", e, name, value, detail);
+        setDetailRecord(detail);
+    };
+
+    /**
+     * Generic Event handler for any Boolean field change
+     */
+    const handleBooleanChange = (e) => {
+        const detail = { ...detailRecord };
+        const { name, checked } = e.target;
+        detail[name] = !checked;
+        console.log("handleBooleanChange >>>>>", e, name, detail);
+        setDetailRecord(detail);
+    };
+
+    /**
+     * Edit Tenant Event handler
+     */
+    const handleEditRecord = (record) => {
+        console.log("handleEditRecord >>>>>", record);
+        setDetailRecord(record);
+        setIsNewRecord(false);
+    };
+
+    /**
+     * Delete Tenant Event handler
+     */
+    const handleDeleteRecord = (record, index) => {
+        if (record === detailRecord) {
+        setDetailRecord(props.records[0]);
+        }
+
+        props.remove(record);
+    };
+
+    /**
+     * Add a New Tenant Event handler
+     */
+    const handleAddNewRecord = () => {
+        setIsNewRecord(true);
+        setDetailRecord({
+        name: "",
+        email: "",
+        cosigner: "",
+        address: "",
+        address2: "",
+        city: "",
+        zip: "",
+        creditApproved: false,
+        });
+    };
+
+    /**
+     * SAVE/SUBMIT button Event handler
+     */
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        if (isNewRecord) {
+        const seqNo = lastSeqNo + 1;
+        detailRecord.tourId = seqNo;
+        setLastSeqNo(seqNo);
+        props.add(detailRecord);
+        } else {
+        props.update(detailRecord);
+        }
+    };
 
     // Definition of the function called getPageRecords
     // This will be executed inside paginate function
@@ -31,36 +115,46 @@ export function TourComponent(props) {
         setPageRecords(records);
     };
 
+    if (isEmpty(detailRecord) && props.loaded) {
+        console.log("Initialized Tenants Component");
+        const length = props.records.length;
+        const lastRec = props.records[length - 1];
+        const seqNo = lastRec.tourId;
+        setLastSeqNo(seqNo);
+        setDetailRecord(props.records[0]);
+    }
+    
     if (props.records && props.records.length > 0 && pageRecords.length === 0) {
         const records = getPageRecords(props.records, 0, recordsPerPage);
         setPageRecords(records);
         // paginate(1);
     }
 
-    const handleAddNewRecord = () => {};
-    const handleDeleteRecord = () => {};
-    const handleEditRecord = () => {};
-
     /*
     ** Use map function to build a dynamic JSX list of Card objects
     ** by transforming props.records array
     */
-
     const rows = props.records.map((record, index) => {
         const row = (
         <tr key={index}>
-            <td>{record.tourId}</td>
+            <td>{format(record.startDate.toDate(), 'dd-MMM-yyyy')}</td>
             <td>{record.name}</td>
             <td>
-                <i className="mx-2 fas fa-binoculars" style={{color: "MediumBlue"}} aria-hidden="true" onClick={() => {
-                    handleEditRecord(record);
-                }}></i>
-                <i className="mx-2 far fa-edit" style={{color: "Blue"}} aria-hidden="true" onClick={() => {
-                    handleEditRecord(record);
-                }}></i>
-                <i className="mx-2 fa fa-trash" style={{color: "Red"}} aria-hidden="true" onClick={() => {
-                    handleDeleteRecord(record, index);
-                }}></i>
+                <i className="mx-2 fas fa-binoculars" style={{color: "MediumBlue"}} aria-hidden="true" 
+                    onClick={() => {
+                        handleEditRecord(record);
+                    }}
+                ></i>
+                <i className="mx-2 far fa-edit" style={{color: "Indigo"}} aria-hidden="true"
+                    onClick={() => {
+                        handleEditRecord(record);
+                    }}
+                ></i>
+                <i className="mx-2 fa fa-trash" style={{color: "Red"}} aria-hidden="true"
+                    onClick={() => {
+                        handleDeleteRecord(record, index);
+                    }}
+                ></i>
             </td>
         </tr>
         );
@@ -78,7 +172,7 @@ export function TourComponent(props) {
             <Table striped bordered hover size="sm">
                 <thead variant="primary">
                     <tr>
-                        <th>Tour ID</th>
+                        <th>Tour Date</th>
                         <th>Tour Name</th>
                         <th>
                             <button type="submit" className="btn btn-primary btn-sm" onClick={handleAddNewRecord}>
@@ -108,11 +202,63 @@ export function TourComponent(props) {
         </Card>
     );
 
+    const rightSide = (
+        <form>
+            <div className="form-row">
+                <div className="form-group col-md-4">
+                    <label for="inputName">Name</label>
+                    <input name="name" type="text" className="form-control" id="inputName"
+                        value={detailRecord.name ? detailRecord.name : ""} onChange={handleTextChange}></input>
+                </div>
+                <div className="form-group col-md-4">
+                    <label for="inputStartDate">Start Date</label>
+                    <input name="startDate" type="text" className="form-control" id="inputStartDate"
+                        value={detailRecord.startDate ? format(detailRecord.startDate.toDate(), 'dd-MMM-yyyy') : ""} onChange={handleTextChange}></input>
+                </div>
+                <div className="form-group col-md-4">
+                    <label for="inputEndDate">End Date</label>
+                    <input name="endDate" type="text" className="form-control" id="inputEndDate"
+                        value={detailRecord.endDate ? format(detailRecord.endDate.toDate(), 'dd-MMM-yyyy') : ""} onChange={handleTextChange}></input>
+                </div>
+            </div>
+
+
+            <div className="form-row col-md-12">
+                <div className="form-check col-md-2 mx-2">
+                    <input name="mealPlan" type="checkbox" className="form-check-input px-0" id="inputMealPlan"
+                        checked={detailRecord.mealPlan ? detailRecord.mealPlan : false} onChange={handleTextChange}></input>
+                    <label class="form-check-label" for="inputMealPlan">Meal Included</label>
+                </div>
+
+                <div className="form-check col-md-3">
+                    <input name="hotel" type="checkbox" className="form-check-input px-0" id="inputHotel"
+                        checked={detailRecord.hotel ? detailRecord.hotel : false} onChange={handleTextChange}></input>
+                    <label class="form-check-label" for="inputHotel">Hotel Included</label>
+                </div>
+
+                <div className="form-check col-md-3">
+                    <input name="group" type="checkbox" className="form-check-input px-0" id="inputGroup"
+                        checked={detailRecord.groupTour ? detailRecord.groupTour : false} onChange={handleTextChange}></input>
+                    <label class="form-check-label" for="inputGroup">Private Tour</label>
+                </div>
+
+                <div className="form-group col-md-3">
+                    <input name="conducted" type="checkbox" className="form-check-input px-0" id="inputConducted"
+                        checked={detailRecord.conducted ? detailRecord.conducted : false} onChange={handleTextChange}></input>
+                    <label class="form-check-label" for="inputConducted">Conducted Tour</label>
+                </div>
+            </div>
+
+
+            <button className="btn btn-primary" onClick={handleSubmit}>Save</button>
+        </form>
+      );
+    
     return (
         <div className='container-fluid'>
             <div className='row no-gutters'>
-            <div className='col-4'>{leftSide}</div>
-            <div className='col-8'>{detfragment}</div>
+                <div className='col-4 no-gutters'>{leftSide}</div>
+                <div className='col-8 no-gutters'>{rightSide}</div>
             </div>
         </div>
     );
