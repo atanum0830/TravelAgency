@@ -21,18 +21,8 @@ export class Handler {
         return this.#record;
     }
 
-    static createNewTourRec() {
-        const item = {
-            name: '',
-            startDate: firebase.firestore.Timestamp.fromDate(new Date()),
-            endDate: firebase.firestore.Timestamp.fromDate(new Date()),
-            mealPlan: true,
-            hotel: true,
-            groupTour: true,
-            conducted: true
-        };
-
-        
-        return item;
+    static isEmpty(rec) {
+        const isEmpty =  (!rec || Object.keys(rec).length === 0);
+        return isEmpty;
     }
 }

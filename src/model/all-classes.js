@@ -2,28 +2,24 @@ import firebase from '../services/firebase';
 
 export class TourRec {
     constructor(rec) {
-        // this.id = rec?.id;
         this.name = rec.hasOwnProperty('name')? rec.name: '';
         this.startDate = rec.hasOwnProperty('startDate')? rec.startDate: TourRec.fromNowToTimeStamp();
         this.endDate = rec.hasOwnProperty('endDate')? rec.endDate: TourRec.fromNowToTimeStamp();
-        this.mealPlan = rec.hasOwnProperty('mealPlan')? rec.mealPlan: true;
-        this.hotel = rec.hasOwnProperty('hotel')? rec.hotel: true;
-        this.groupTour = rec.hasOwnProperty('groupTour')? rec.groupTour: true;
+        this.mealIncluded = rec.hasOwnProperty('mealIncluded')? rec.mealIncluded: true;
+        this.hotelIncluded = rec.hasOwnProperty('hotelIncluded')? rec.hotelIncluded: true;
+        this.isPrivate = rec.hasOwnProperty('isPrivate')? rec.isPrivate: true;
         this.conducted = rec.hasOwnProperty('conducted')? rec.conducted: true;
-        // this.vo = rec?.vo;
-        if (rec.hasOwnProperty('id')) {
-            this['id'] = rec.id;
-        }
+        if (rec.hasOwnProperty('id')) { this.id = rec.id; }
+        if (rec.hasOwnProperty('vo')) { this.vo = rec.vo; }
     }
-    // id;
+
     name;
     startDate;
     endDate;
-    mealPlan;
-    hotel;
-    groupTour;
+    mealIncluded;
+    hotelIncluded;
+    isPrivate;
     conducted;
-    vo = {};
 
     static fromNowToTimeStamp() {
         const date = new Date();

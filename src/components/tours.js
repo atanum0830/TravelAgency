@@ -12,15 +12,14 @@ export function TourComponent(props) {
     const [pageRecords, setPageRecords] = useState([]); // array of records in a specific page (3 such records)
     const [detailRecord, setDetailRecord] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
-    const [lastSeqNo, setLastSeqNo] = useState(0);
     const recordsPerPage = 3;
     const isEmpty = (o) => !o || Object.keys(o).length === 0;
 
     /**
      * Generic Event handler for any Text field change
      */
-    const handleTextChange = (e) => {
-        const handler = new Handler(e, detailRecord, isNewRecord);
+    const handleTextChange = (event) => {
+        const handler = new Handler(event, detailRecord, isNewRecord);
         const detail = handler.handleTextChange();
         setDetailRecord(detail);
     };
@@ -46,17 +45,6 @@ export function TourComponent(props) {
     };
 
     /**
-     * Delete Tenant Event handler
-     */
-    const handleDeleteRecord = (record, index) => {
-        if (record === detailRecord) {
-            setDetailRecord(props.records[0]);
-        }
-
-        props.remove(record);
-    };
-
-    /**
      * Add a New Tenant Event handler
      */
     const handleAddNewRecord = () => {
@@ -66,15 +54,20 @@ export function TourComponent(props) {
     };
 
     /**
+     * Delete Tenant Event handler
+     */
+    const handleDeleteRecord = (record, index) => {
+        if (record === detailRecord) { setDetailRecord(props.records[0]); }
+        props.remove(record);
+    };
+
+    /**
      * SAVE/SUBMIT button Event handler
      */
     const handleSubmit = (event) => {
         event.preventDefault();
-
+        // isNewRecord ? props.add(detailRecord) : props.update(detailRecord);
         if (isNewRecord) {
-            const seqNo = lastSeqNo + 1;
-            detailRecord.tourId = seqNo;
-            setLastSeqNo(seqNo);
             props.add(detailRecord);
         } else {
             props.update(detailRecord);
@@ -84,13 +77,13 @@ export function TourComponent(props) {
     // Definition of the function called getPageRecords
     // This will be executed inside paginate function
     const getPageRecords = (allRecords, startIndex, recordsPerPage) => {
-        const pageRecords = [];
+        const records = [];
         for (let index = startIndex; index < startIndex + recordsPerPage && index < allRecords.length; index++) {
             const record = allRecords[index];
-            pageRecords.push(record);
+            records.push(record);
         }
 
-        return pageRecords;
+        return records;
     };
 
     // Definition of the function called paginate. Circular bracket optional if only one param
@@ -104,10 +97,6 @@ export function TourComponent(props) {
 
     if (isEmpty(detailRecord) && props.loaded) {
         console.log("Initialized Tenants Component");
-        const length = props.records.length;
-        const lastRec = props.records[length - 1];
-        const seqNo = lastRec.tourId;
-        setLastSeqNo(seqNo);
         setDetailRecord(props.records[0]);
     }
     
@@ -121,7 +110,7 @@ export function TourComponent(props) {
     ** Use map function to build a dynamic JSX list of Card objects
     ** by transforming props.records array
     */
-    const rows = props.records.map((record, index) => {
+    const rows = pageRecords.map((record, index) => {
         const row = (
         <tr key={index}>
             <td>{format(record.startDate.toDate(), 'dd-MMM-yyyy')}</td>
@@ -170,24 +159,16 @@ export function TourComponent(props) {
                 <tbody>{rows}</tbody>
             </Table>
 
-            <Pagination recordsPerPage={recordsPerPage} totalRecords={props.records.length} paginate={paginate}></Pagination>
+            <Pagination itemsPerPage={recordsPerPage} totalItems={props.records.length} paginate={paginate}></Pagination>
 
             </Card.Body>
         </Card>
     );
 
     /*
-    detfragment will be the dynamically selected Card object
-    when you click <Learn More> it will allocate that object to detfragment
+    rightSide will be the dynamically selected Card object
+    when you click <Learn More> it will allocate that object to rightSide
     */
-    const detfragment = (
-        <Card style={{ width: '100%' }}>
-            <Card.Body>
-                <Card.Title>{detailRecord.name}</Card.Title>
-                <Card.Text>{detailRecord.description}</Card.Text>
-            </Card.Body>
-        </Card>
-    );
 
     const rightSide = (
         <form>
@@ -212,20 +193,20 @@ export function TourComponent(props) {
 
             <div className="form-row col-md-12">
                 <div className="form-check col-md-2 mx-2">
-                    <input name="mealPlan" type="checkbox" className="form-check-input px-0" id="inputMealPlan"
-                        checked={detailRecord.mealPlan ? detailRecord.mealPlan : false} onChange={handleTextChange}></input>
+                    <input name="mealIncluded" type="checkbox" className="form-check-input px-0" id="inputMealPlan"
+                        checked={detailRecord.mealIncluded ? detailRecord.mealIncluded : false} onChange={handleTextChange}></input>
                     <label className="form-check-label" for="inputMealPlan">Meal Included</label>
                 </div>
 
                 <div className="form-check col-md-3">
-                    <input name="hotel" type="checkbox" className="form-check-input px-0" id="inputHotel"
-                        checked={detailRecord.hotel ? detailRecord.hotel : false} onChange={handleTextChange}></input>
+                    <input name="hotelIncluded" type="checkbox" className="form-check-input px-0" id="inputHotel"
+                        checked={detailRecord.hotelIncluded ? detailRecord.hotelIncluded : false} onChange={handleTextChange}></input>
                     <label className="form-check-label" for="inputHotel">Hotel Included</label>
                 </div>
 
                 <div className="form-check col-md-3">
                     <input name="group" type="checkbox" className="form-check-input px-0" id="inputGroup"
-                        checked={detailRecord.groupTour ? detailRecord.groupTour : false} onChange={handleTextChange}></input>
+                        checked={detailRecord.isPrivate ? detailRecord.isPrivate : false} onChange={handleTextChange}></input>
                     <label className="form-check-label" for="inputGroup">Private Tour</label>
                 </div>
 
