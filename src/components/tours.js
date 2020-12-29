@@ -95,6 +95,7 @@ export function TourComponent(props) {
         const startIndex = (pageNumber - 1) * recordsPerPage;
         const records = getPageRecords(props.records, startIndex, recordsPerPage);
         setPageRecords(records);
+        setDetailRecord(records[0]);
     };
 
     if (isEmpty(detailRecord) && props.loaded) {
