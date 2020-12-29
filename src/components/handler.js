@@ -14,12 +14,24 @@ export class Handler {
         this.#record[name] = value;
         console.log("handletextChange >>>>>", this.#event, name, value, this.#record);
         if (!this.#isNew) {
-          const vo = this.#record.vo;
-          vo[name] = value;
+            const vo = this.#record.vo;
+            vo[name] = value;
         }
 
         return this.#record;
     }
+
+    handleBooleanChange() {
+        const { name, checked } = this.#event.target;
+        this.#record[name] = checked;
+        console.log("After BooleanChange >>>>>", name, checked, this.#record);
+        if (!this.#isNew) {
+            const vo = this.#record.vo;
+            vo[name] = checked;
+        }
+
+        return this.#record;
+    };
 
     static isEmpty(rec) {
         const isEmpty =  (!rec || Object.keys(rec).length === 0);

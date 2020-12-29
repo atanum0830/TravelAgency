@@ -24,6 +24,7 @@ function App() {
   const [loadedBookings, setLoadedBookings] = useState(false);
 
   const updateTour = (tour) => {
+    setLoadedTours(false);
     dataService.updateRecord(toursRef, tour);
   };
 

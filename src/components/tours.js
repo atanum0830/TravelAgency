@@ -28,11 +28,9 @@ export function TourComponent(props) {
     /**
      * Generic Event handler for any Boolean field change
      */
-    const handleBooleanChange = (e) => {
-        const detail = { ...detailRecord };
-        const { name, checked } = e.target;
-        detail[name] = !checked;
-        console.log("handleBooleanChange >>>>>", e, name, detail);
+    const handleBooleanChange = (event) => {
+        const handler = new Handler(event, detailRecord, isNewRecord);
+        const detail = handler.handleBooleanChange();
         setDetailRecord(detail);
     };
 
@@ -73,6 +71,7 @@ export function TourComponent(props) {
             setCollChanged(true);
         } else {
             props.update(detailRecord);
+            setCollChanged(true);
         }
     };
 
@@ -200,25 +199,25 @@ export function TourComponent(props) {
             <div className="form-row col-md-12">
                 <div className="form-check col-md-2 mx-2">
                     <input name="mealIncluded" type="checkbox" className="form-check-input px-0" id="inputMealPlan"
-                        checked={detailRecord.mealIncluded ? detailRecord.mealIncluded : false} onChange={handleTextChange}></input>
+                        checked={detailRecord.mealIncluded ? detailRecord.mealIncluded : false} onChange={handleBooleanChange}></input>
                     <label className="form-check-label" for="inputMealPlan">Meal Included</label>
                 </div>
 
                 <div className="form-check col-md-3">
                     <input name="hotelIncluded" type="checkbox" className="form-check-input px-0" id="inputHotel"
-                        checked={detailRecord.hotelIncluded ? detailRecord.hotelIncluded : false} onChange={handleTextChange}></input>
+                        checked={detailRecord.hotelIncluded ? detailRecord.hotelIncluded : false} onChange={handleBooleanChange}></input>
                     <label className="form-check-label" for="inputHotel">Hotel Included</label>
                 </div>
 
                 <div className="form-check col-md-3">
-                    <input name="group" type="checkbox" className="form-check-input px-0" id="inputGroup"
-                        checked={detailRecord.isPrivate ? detailRecord.isPrivate : false} onChange={handleTextChange}></input>
+                    <input name="isPrivate" type="checkbox" className="form-check-input px-0" id="inputGroup"
+                        checked={detailRecord.isPrivate ? detailRecord.isPrivate : false} onChange={handleBooleanChange}></input>
                     <label className="form-check-label" for="inputGroup">Private Tour</label>
                 </div>
 
                 <div className="form-group col-md-3">
                     <input name="conducted" type="checkbox" className="form-check-input px-0" id="inputConducted"
-                        checked={detailRecord.conducted ? detailRecord.conducted : false} onChange={handleTextChange}></input>
+                        checked={detailRecord.conducted ? detailRecord.conducted : false} onChange={handleBooleanChange}></input>
                     <label className="form-check-label" for="inputConducted">Conducted Tour</label>
                 </div>
             </div>
