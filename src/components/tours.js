@@ -163,7 +163,8 @@ export function TourComponent(props) {
                 <tbody>{rows}</tbody>
             </Table>
 
-            <Pagination itemsPerPage={recordsPerPage} totalItems={props.records.length} paginate={paginate}></Pagination>
+            <Pagination itemsPerPage={recordsPerPage} totalItems={props.records.length}
+                curPageNo={currentPage} paginate={paginate}></Pagination>
 
             </Card.Body>
         </Card>

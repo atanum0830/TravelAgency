@@ -11,14 +11,17 @@ const Pagination = ({ itemsPerPage, totalItems, curPageNo, paginate }) => {
     <nav aria-label="Page navigation example">
       <ul className="pagination">
           <li className="page-item"><a className="page-link" href="prev">Previous</a></li>
-          {pageNumbers.map(pageNo => (curPageNo === pageNo) ?
+          {pageNumbers.forEach(pageNo => {
+            if (pageNo === curPageNo) {
               <li key={pageNo} className="page-item active" aria-current="page">
-                  <a onClick={() => paginate(pageNo)} href='#' className='page-link'>{pageNo}</a>
-              </li> :
-              <li key={pageNo} className="page-item">
-                  <a onClick={() => paginate(pageNo)} href='#' className='page-link'>{pageNo}</a>
+                <a onClick={() => paginate(pageNo)} href="#" className="page-link">{pageNo}</a>
               </li>
-          )}
+            } else {
+              <li key={pageNo} className="page-item">
+                <a onClick={() => paginate(pageNo)} href="#" className="page-link">{pageNo}</a>
+              </li>
+            }
+          })}
           <li className="page-item"><a className="page-link" href="next">Next</a></li>
       </ul>
     </nav>
