@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
 import { Table, Card, Button, FormControl, InputGroup } from 'react-bootstrap';
 import { format } from 'date-fns';
 import Pagination from './pagination';
@@ -34,6 +35,15 @@ export function TourComponent(props) {
         setDetailRecord(detail);
     };
 
+    /**
+     * Generic Event handler for any Date field change
+     */
+    const handleDateChange = (date, name) => {
+        const handler = new Handler({name: name, date: date}, detailRecord, isNewRecord);
+        const detail = handler.handleDateChange();
+        setDetailRecord(detail);
+    };
+    
     /**
      * Edit Tenant Event handler
      */
@@ -178,20 +188,22 @@ export function TourComponent(props) {
     const rightSide = (
         <form>
             <div className="form-row">
-                <div className="form-group col-md-4">
+                <div className="form-group col-md-8">
                     <label for="inputName">Name</label>
                     <input name="name" type="text" className="form-control" id="inputName"
                         value={detailRecord.name ? detailRecord.name : ""} onChange={handleTextChange}></input>
                 </div>
-                <div className="form-group col-md-4">
+                <div className="form-group col-md-2">
                     <label for="inputStartDate">Start Date</label>
-                    <input name="startDate" type="text" className="form-control" id="inputStartDate"
-                        value={detailRecord.startDate ? format(detailRecord.startDate.toDate(), 'dd-MMM-yyyy') : ""} onChange={handleTextChange}></input>
+                    <DatePicker name="startDate" className="form-control" id="inputStartDate" dateFormat="dd-MMM-yyyy"
+                        selected={detailRecord.startDate ? detailRecord.startDate.toDate() : new Date()}
+                        onChange={(date) => {handleDateChange(date, 'startDate')}}></DatePicker>
                 </div>
-                <div className="form-group col-md-4">
+                <div className="form-group col-md-2">
                     <label for="inputEndDate">End Date</label>
-                    <input name="endDate" type="text" className="form-control" id="inputEndDate"
-                        value={detailRecord.endDate ? format(detailRecord.endDate.toDate(), 'dd-MMM-yyyy') : ""} onChange={handleTextChange}></input>
+                    <DatePicker name="endDate" className="form-control" id="inputEndDate" dateFormat="dd-MMM-yyyy"
+                        selected={detailRecord.endDate ? detailRecord.endDate.toDate() : new Date()}
+                        onChange={(date) => {handleDateChange(date, 'endDate')}}></DatePicker>
                 </div>
             </div>
 

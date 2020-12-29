@@ -1,3 +1,4 @@
+import { TourRec } from '../model/all-classes';
 import firebase from '../services/firebase';
 export class Handler {
     #record;
@@ -32,6 +33,19 @@ export class Handler {
 
         return this.#record;
     };
+
+    handleDateChange() {
+        const { name, date } = this.#event;
+        const ts = TourRec.fromDateToTimeStamp(date);
+        this.#record[name] = ts;
+        console.log("After BooleanChange >>>>>", name, ts, this.#record);
+        if (!this.#isNew) {
+            const vo = this.#record.vo;
+            vo[name] = ts;
+        }
+
+        return this.#record;
+    }
 
     static isEmpty(rec) {
         const isEmpty =  (!rec || Object.keys(rec).length === 0);

@@ -27,4 +27,11 @@ export class TourRec {
         const ts = firebase.firestore.Timestamp.fromDate(date);
         return ts;
     }
+
+    static fromDateToTimeStamp(date) {
+        date.setHours(0, 0, 0, 0);
+        const ts = firebase.firestore.Timestamp.fromDate(date);
+        return ts;
+    }
+
 }
