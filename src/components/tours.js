@@ -12,6 +12,7 @@ export function TourComponent(props) {
     const [pageRecords, setPageRecords] = useState([]); // array of records in a specific page (3 such records)
     const [detailRecord, setDetailRecord] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
+    const [collChanged, setCollChanged] = useState(false);
     const recordsPerPage = 3;
     const isEmpty = (o) => !o || Object.keys(o).length === 0;
 
@@ -57,8 +58,9 @@ export function TourComponent(props) {
      * Delete Tenant Event handler
      */
     const handleDeleteRecord = (record, index) => {
-        if (record === detailRecord) { setDetailRecord(props.records[0]); }
+        // if (record === detailRecord) { setDetailRecord(props.records[0]); }
         props.remove(record);
+        setCollChanged(true);
     };
 
     /**
@@ -66,9 +68,9 @@ export function TourComponent(props) {
      */
     const handleSubmit = (event) => {
         event.preventDefault();
-        // isNewRecord ? props.add(detailRecord) : props.update(detailRecord);
         if (isNewRecord) {
             props.add(detailRecord);
+            setCollChanged(true);
         } else {
             props.update(detailRecord);
         }
@@ -101,11 +103,13 @@ export function TourComponent(props) {
     }
     
     if (props.records && props.records.length > 0 && pageRecords.length === 0) {
-        const records = getPageRecords(props.records, 0, recordsPerPage);
-        setPageRecords(records);
-        // paginate(1);
+        paginate(1);
     }
 
+    if (collChanged && props.loaded) {
+        paginate(currentPage);
+        setCollChanged(false);
+    }
     /*
     ** Use map function to build a dynamic JSX list of Card objects
     ** by transforming props.records array

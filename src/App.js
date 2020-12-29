@@ -28,10 +28,12 @@ function App() {
   };
 
   const removeTour = (tour) => {
+    setLoadedTours(false);
     dataService.deleteRecord(toursRef, tour);
   };
 
   const addTour = (tour) => {
+    setLoadedTours(false);
     dataService.insertRecord(toursRef, tour);
   };
 
