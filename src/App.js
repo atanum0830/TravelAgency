@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import firebase from './services/firebase';
 import dataService from './services/data-service';
+import { AttractionComponent } from './components/attractions';
 import { BookingComponent } from './components/bookings';
 import { CustomerComponent } from './components/customers';
 import { HomeComponent } from './components/home';
@@ -17,12 +18,34 @@ function App() {
   const toursRef = firebase.firestore().collection('tours');
   const bookingsRef = firebase.firestore().collection('bookings');
   const customersRef = firebase.firestore().collection('customers');
+  const attractionsRef = firebase.firestore().collection('attractions');
 
   const [tours, setTours] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [attractions, setAttractions] = useState([]);
+
   const [loadedTours, setLoadedTours] = useState(false);
   const [loadedBookings, setLoadedBookings] = useState(false);
+  const [loadedAttractions, setLoadedAttractions] = useState(false);
+  const [loadedCustomers, setLoadedCustomers] = useState(false);
+
+  // update={updateAttraction} remove={removeAttraction} add={addAttraction} />
+
+  const updateAttraction = (attraction) => {
+    setLoadedAttractions(false);
+    dataService.updateRecord(attractionsRef, attraction);
+  }
+
+  const removeAttraction = (attraction) => {
+    setLoadedAttractions(false);
+    dataService.deleteRecord(attractionsRef, attraction);
+  }
+
+  const addAttraction = (attraction) => {
+    setLoadedAttractions(false);
+    dataService.insertRecord(attractionsRef, attraction);
+  }
 
   const updateTour = (tour) => {
     setLoadedTours(false);
@@ -64,7 +87,16 @@ function App() {
     });
   }
 
+  const loadAttractions = () => {
+    attractionsRef.orderBy('name').onSnapshot((querySnapshot) => {
+      const documents = dataService.fetchSnapshotDocs(querySnapshot);
+      setAttractions(documents);
+      setLoadedAttractions(true);
+    });
+  }
+
   useEffect(() => {
+    loadAttractions();
     loadTours();
     loadBookings();
     // loadCustomers();
@@ -76,6 +108,10 @@ function App() {
       <Router>
         <Switch>
           <Route exact path='/' component={HomeComponent} />
+          <Route path='/attractions' render={(props) => (
+              <AttractionComponent records={attractions} loaded={loadedAttractions} 
+                update={updateAttraction} remove={removeAttraction} add={addAttraction} />
+            )} />
           <Route path='/tours' render={(props) => (
               <TourComponent records={tours} loaded={loadedTours} 
                 update={updateTour} remove={removeTour} add={addTour} />

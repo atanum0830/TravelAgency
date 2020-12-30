@@ -5,9 +5,8 @@ import { format } from 'date-fns';
 import { Handler } from './handler';
 import { TourRec } from '../model/all-classes';
 import Pagination from './pagination';
-import PlacesList from './places-list';
 
-export function TourComponent(props) {
+export function AttractionComponent(props) {
     console.log(props);
 
     const [isNewRecord, setIsNewRecord] = useState(false); //true for add mode, false for update/edit mode
@@ -67,7 +66,6 @@ export function TourComponent(props) {
      * Delete Tenant Event handler
      */
     const handleDeleteRecord = (record, index) => {
-        // if (record === detailRecord) { setDetailRecord(props.records[0]); }
         props.remove(record);
         setCollChanged(true);
     };
@@ -128,8 +126,7 @@ export function TourComponent(props) {
     const rows = pageRecords.map((record, index) => {
         const row = (
         <tr key={index}>
-            <td>{format(record.startDate.toDate(), 'dd-MMM-yyyy')}</td>
-            <td style={{maxWidth: "150px"}}>{record.name}</td>
+            <td style={{maxWidth: "100px"}}>{record.name}</td>
             <td>
                 <i className="mx-2 fas fa-binoculars" style={{color: "MediumBlue"}} aria-hidden="true" 
                     onClick={() => {
@@ -157,17 +154,16 @@ export function TourComponent(props) {
             <Card.Body>
             <Card.Title>
                 <div className="row">
-                    <div className="col">Upcoming Tours</div>
+                    <div className="col">Places We Visit</div>
                 </div>
             </Card.Title>
             <Table striped bordered hover size="sm">
                 <thead variant="primary">
                     <tr>
-                        <th>Tour Date</th>
-                        <th>Tour Name</th>
+                        <th>Place/Attractions</th>
                         <th>
                             <button type="submit" className="btn btn-primary btn-sm" onClick={handleAddNewRecord}>
-                                <i className="fa fa-plus-circle" aria-hidden="true"></i> New Tour</button>
+                                <i className="fa fa-plus-circle" aria-hidden="true"></i> New Place</button>
                         </th>
                     </tr>
                 </thead>
@@ -189,56 +185,70 @@ export function TourComponent(props) {
     const rightSide = (
         <form>
             <div className="form-row">
-                <div className="form-group col-md-8">
+                <div className="form-group col-md-3">
                     <label for="inputName">Name</label>
                     <input name="name" type="text" className="form-control" id="inputName"
                         value={detailRecord.name ? detailRecord.name : ""} onChange={handleTextChange}></input>
                 </div>
                 <div className="form-group col-md-2">
-                    <label for="inputStartDate">Start Date</label>
-                    <DatePicker name="startDate" className="form-control" id="inputStartDate" dateFormat="dd-MMM-yyyy"
-                        selected={detailRecord.startDate ? detailRecord.startDate.toDate() : new Date()}
-                        onChange={(date) => {handleDateChange(date, 'startDate')}}></DatePicker>
+                    <label for="inputLatitude">Latitude</label>
+                    <input name="latitude" type="text" className="form-control" id="inputLatitude"
+                        value={detailRecord.latitude ? detailRecord.latitude : ""} onChange={handleTextChange}></input>
                 </div>
                 <div className="form-group col-md-2">
-                    <label for="inputEndDate">End Date</label>
-                    <DatePicker name="endDate" className="form-control" id="inputEndDate" dateFormat="dd-MMM-yyyy"
-                        selected={detailRecord.endDate ? detailRecord.endDate.toDate() : new Date()}
-                        onChange={(date) => {handleDateChange(date, 'endDate')}}></DatePicker>
+                    <label for="inputLongitude">Longitude</label>
+                    <input name="longitude" type="text" className="form-control" id="inputLongitude"
+                        value={detailRecord.longitude ? detailRecord.longitude : ""} onChange={handleTextChange}></input>
                 </div>
             </div>
 
+            <div className="form-row">
+                <div className="form-group col-md-12">
+                    <label for="inputDescription">Highlights</label>
+                    <input name="description" type="text" className="form-control" id="inputDescription"
+                        value={detailRecord.description ? detailRecord.description : ""} onChange={handleTextChange}></input>
+                </div>
+            </div>
 
             <div className="form-row col-md-12">
                 <div className="form-check col-md-2 mx-2">
-                    <input name="mealIncluded" type="checkbox" className="form-check-input px-0" id="inputMealPlan"
-                        checked={detailRecord.mealIncluded ? detailRecord.mealIncluded : false} onChange={handleBooleanChange}></input>
-                    <label className="form-check-label" for="inputMealPlan">Meal Included</label>
-                </div>
-
-                <div className="form-check col-md-3">
-                    <input name="hotelIncluded" type="checkbox" className="form-check-input px-0" id="inputHotel"
-                        checked={detailRecord.hotelIncluded ? detailRecord.hotelIncluded : false} onChange={handleBooleanChange}></input>
-                    <label className="form-check-label" for="inputHotel">Hotel Included</label>
-                </div>
-
-                <div className="form-check col-md-3">
-                    <input name="isPrivate" type="checkbox" className="form-check-input px-0" id="inputGroup"
-                        checked={detailRecord.isPrivate ? detailRecord.isPrivate : false} onChange={handleBooleanChange}></input>
-                    <label className="form-check-label" for="inputGroup">Private Tour</label>
+                    <input name="beach" type="checkbox" className="form-check-input px-0" id="inputBeach"
+                        checked={detailRecord.beach ? detailRecord.beach : false} onChange={handleBooleanChange}></input>
+                    <label className="form-check-label" for="inputMealPlan">Beach</label>
                 </div>
 
                 <div className="form-group col-md-3">
-                    <input name="conducted" type="checkbox" className="form-check-input px-0" id="inputConducted"
-                        checked={detailRecord.conducted ? detailRecord.conducted : false} onChange={handleBooleanChange}></input>
-                    <label className="form-check-label" for="inputConducted">Conducted Tour</label>
+                    <input name="mountain" type="checkbox" className="form-check-input px-0" id="inputMountain"
+                        checked={detailRecord.mountain ? detailRecord.mountain : false} onChange={handleBooleanChange}></input>
+                    <label className="form-check-label" for="inputMountain">Mountain</label>
+                </div>
+
+                <div className="form-group col-md-3">
+                    <input name="river" type="checkbox" className="form-check-input px-0" id="inputRiver"
+                        checked={detailRecord.river ? detailRecord.river : false} onChange={handleBooleanChange}></input>
+                    <label className="form-check-label" for="inputRiver">River/Lake</label>
+                </div>
+
+                <div className="form-group col-md-3">
+                    <input name="nature" type="checkbox" className="form-check-input px-0" id="inputNature"
+                        checked={detailRecord.nature ? detailRecord.nature : false} onChange={handleBooleanChange}></input>
+                    <label className="form-check-label" for="inputNature">Natural Beauty</label>
+                </div>
+
+                <div className="form-group col-md-3">
+                    <input name="sports" type="checkbox" className="form-check-input px-0" id="inputSports"
+                        checked={detailRecord.sports ? detailRecord.sports : false} onChange={handleBooleanChange}></input>
+                    <label className="form-check-label" for="inputSports">Sports/Recreation/Fun</label>
+                </div>
+
+                <div className="form-group col-md-3">
+                    <input name="shops" type="checkbox" className="form-check-input px-0" id="inputSports"
+                        checked={detailRecord.shops ? detailRecord.shops : false} onChange={handleBooleanChange}></input>
+                    <label className="form-check-label" for="inputSports">Shopping/Outlets/Malls</label>
                 </div>
             </div>
 
-            <div className="form-row col-md-6">
-                <PlacesList></PlacesList>
-            </div>
-            
+
             <button className="btn btn-primary" onClick={handleSubmit}>Save</button>
         </form>
       );

@@ -1,4 +1,5 @@
 import React from "react";
+import NavDropdown from 'react-bootstrap/NavDropdown'
 
 export function NavBarComponent() {
 
@@ -14,20 +15,16 @@ export function NavBarComponent() {
                     <div className="navbar-nav me-auto mb-2 mb-lg-0">
                         <a className="nav-link active" aria-current="page" href="tours"><i className="fas fa-plane-departure"></i>Tours</a>
                         <a className="nav-link active" href="bookings"><i className="fa fa-address-card"></i>Bookings</a>
-                        <a className="nav-link active" href="customers"><i className="fas fa-user-friends"></i>Customers</a>
 {/* 
                         <a className="nav-link disabled" href="home" tabIndex="-1" aria-disabled="true">Disabled</a>
  */}
-                        <div className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="home">
-                            Dropdown link
-                            </a>
-                            <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <div><a className="dropdown-item" href="tours">Tours</a></div>
-                                <div><a className="dropdown-item" href="bookings">Bookings</a></div>
-                                <div><a className="dropdown-item" href="customers">Customers</a></div>
-                            </div>
-                        </div>
+                        <NavDropdown title="Admin" id="nav-admin">
+                            <NavDropdown.Item eventKey="4.1" href="attractions"><i className="fas fa-archway"></i> Attractions</NavDropdown.Item>
+                            <NavDropdown.Item eventKey="4.2" href="tours"><i className="fas fa-plane-departure"></i> Tours</NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item eventKey="4.3" href="customers"><i className="fas fa-user-friends"></i> Customers</NavDropdown.Item>
+                            <NavDropdown.Item eventKey="4.4" href="bookings"><i className="fas fa-passport"></i> Bookings</NavDropdown.Item>
+                        </NavDropdown>
                     </div>
                 </div>
 
