@@ -1,7 +1,7 @@
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import firebase from './services/firebase';
 import dataService from './services/data-service';
@@ -103,7 +103,7 @@ function App() {
   }, []);
 
   return (
-    <React.Fragment>
+    <Fragment>
       <NavBarComponent></NavBarComponent>
       <Router>
         <Switch>
@@ -113,7 +113,7 @@ function App() {
                 update={updateAttraction} remove={removeAttraction} add={addAttraction} />
             )} />
           <Route path='/tours' render={(props) => (
-              <TourComponent records={tours} loaded={loadedTours} 
+              <TourComponent records={tours} loaded={loadedTours} depRecords={attractions}
                 update={updateTour} remove={removeTour} add={addTour} />
             )} />
           <Route path='/bookings' render={(props) => <BookingComponent bookings={bookings} loaded={loadedBookings}/>} />
@@ -121,7 +121,7 @@ function App() {
           <Route component={NoMatchComponent} />
         </Switch>
       </Router>
-    </React.Fragment>
+    </Fragment>
   );
 }
 

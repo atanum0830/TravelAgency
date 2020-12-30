@@ -9,6 +9,7 @@ export class TourRec {
         this.hotelIncluded = rec.hasOwnProperty('hotelIncluded')? rec.hotelIncluded: true;
         this.isPrivate = rec.hasOwnProperty('isPrivate')? rec.isPrivate: true;
         this.conducted = rec.hasOwnProperty('conducted')? rec.conducted: true;
+        this.places = rec.hasOwnProperty('places')? rec.places: [];
         if (rec.hasOwnProperty('id')) { this.id = rec.id; }
         if (rec.hasOwnProperty('vo')) { this.vo = rec.vo; }
     }
@@ -20,6 +21,7 @@ export class TourRec {
     hotelIncluded;
     isPrivate;
     conducted;
+    places;
 
     static fromNowToTimeStamp() {
         const date = new Date();

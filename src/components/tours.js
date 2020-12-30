@@ -45,6 +45,18 @@ export function TourComponent(props) {
         setDetailRecord(detail);
     };
     
+    const handleListAdd = (name, item, index) => {
+        const handler = new Handler({name: name, item: item, index: index}, detailRecord, isNewRecord);
+        const detail = handler.handleListAdd();
+        setDetailRecord(detail);
+    };
+
+    const handleListDelete = (name, item, index) => {
+        const handler = new Handler({name: name, item: item, index: index}, detailRecord, isNewRecord);
+        const detail = handler.handleListDelete();
+        setDetailRecord(detail);
+    };
+
     /**
      * Edit Tenant Event handler
      */
@@ -236,7 +248,8 @@ export function TourComponent(props) {
             </div>
 
             <div className="form-row col-md-6">
-                <DependsList></DependsList>
+                <DependsList name='places' id='inputPlaces' depRecs={props.depRecords} depIds={detailRecord.places}
+                    addItem={handleListAdd} deleteItem={handleListDelete}></DependsList>
             </div>
             
             <button className="btn btn-primary" onClick={handleSubmit}>Save</button>

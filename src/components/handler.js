@@ -47,6 +47,34 @@ export class Handler {
         return this.#record;
     }
 
+    handleListAdd() {
+        const { name, item, index } = this.#event;
+        const list = this.#record[name];
+        list.push(item.id);
+        this.#record[name] = list;
+        console.log("After handleListAdd >>>>>", name, item, this.#record);
+        if (!this.#isNew) {
+            const vo = this.#record.vo;
+            vo[name] = list;
+        }
+
+        return this.#record;
+    }
+
+    handleListDelete() {
+        const { name, item, index } = this.#event;
+        const list = this.#record[name];
+        list.splice(index, 1);
+        this.#record[name] = list;
+        console.log("After handleListDelete >>>>>", name, item, this.#record);
+        if (!this.#isNew) {
+            const vo = this.#record.vo;
+            vo[name] = list;
+        }
+
+        return this.#record;
+    }
+
     static isEmpty(rec) {
         const isEmpty =  (!rec || Object.keys(rec).length === 0);
         return isEmpty;
