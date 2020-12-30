@@ -14,7 +14,7 @@ export function AttractionComponent(props) {
     const [detailRecord, setDetailRecord] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
     const [collChanged, setCollChanged] = useState(false);
-    const recordsPerPage = 3;
+    const recordsPerPage = 10;
     const isEmpty = (o) => !o || Object.keys(o).length === 0;
 
     /**
@@ -185,7 +185,7 @@ export function AttractionComponent(props) {
     const rightSide = (
         <form>
             <div className="form-row">
-                <div className="form-group col-md-3">
+                <div className="form-group col-md-2">
                     <label for="inputName">Name</label>
                     <input name="name" type="text" className="form-control" id="inputName"
                         value={detailRecord.name ? detailRecord.name : ""} onChange={handleTextChange}></input>
@@ -195,50 +195,93 @@ export function AttractionComponent(props) {
                     <input name="latitude" type="text" className="form-control" id="inputLatitude"
                         value={detailRecord.latitude ? detailRecord.latitude : ""} onChange={handleTextChange}></input>
                 </div>
+
                 <div className="form-group col-md-2">
                     <label for="inputLongitude">Longitude</label>
                     <input name="longitude" type="text" className="form-control" id="inputLongitude"
                         value={detailRecord.longitude ? detailRecord.longitude : ""} onChange={handleTextChange}></input>
                 </div>
+
+                <div className="form-group col-md-2">
+                    <label for="inputAirport">Airport</label>
+                    <input name="airport" type="text" className="form-control" id="inputAirport"
+                        value={detailRecord.airport ? detailRecord.airport : ""} onChange={handleTextChange}></input>
+                </div>
+
+                <div className="form-group col-md-2">
+                    <label for="inputStation">Station</label>
+                    <input name="station" type="text" className="form-control" id="inputStation"
+                        value={detailRecord.station ? detailRecord.station : ""} onChange={handleTextChange}></input>
+                </div>
             </div>
 
             <div className="form-row">
-                <div className="form-group col-md-12">
-                    <label for="inputDescription">Highlights</label>
+
+
+                <div className="form-floating col-md-12">
+{/* 
                     <input name="description" type="text" className="form-control" id="inputDescription"
                         value={detailRecord.description ? detailRecord.description : ""} onChange={handleTextChange}></input>
+ */}
+                    <label for="inputDescription">Attraction Highlights</label>
+                    <textarea name="description" class="form-control" style={{height: "100px"}} placeholder="Provide details of the attraction" id="inputDescription"
+                        value={detailRecord.description ? detailRecord.description : ""} onChange={handleTextChange}></textarea>
                 </div>
             </div>
 
-            <div className="form-row col-md-12">
-                <div className="form-check col-md-2 mx-2">
-                    <input name="beach" type="checkbox" className="form-check-input px-0" id="inputBeach"
-                        checked={detailRecord.beach ? detailRecord.beach : false} onChange={handleBooleanChange}></input>
-                    <label className="form-check-label" for="inputMealPlan">Beach</label>
-                </div>
-
+            <div className="col shadow col-md-3 mb-5 bg-white rounded">
                 <div className="form-group col-md-3">
                     <input name="mountain" type="checkbox" className="form-check-input px-0" id="inputMountain"
                         checked={detailRecord.mountain ? detailRecord.mountain : false} onChange={handleBooleanChange}></input>
-                    <label className="form-check-label" for="inputMountain">Mountain</label>
+                    <label className="form-check-label" for="inputMountain">Mountain/Hiking</label>
+                </div>
+
+                <div className="form-group col-md-3">
+                    <input name="city" type="checkbox" className="form-check-input px-0" id="inputCity"
+                        checked={detailRecord.city ? detailRecord.city : false} onChange={handleBooleanChange}></input>
+                    <label className="form-check-label" for="inputCity">Important/City/Capital</label>
+                </div>
+
+                <div className="form-group col-md-3">
+                    <input name="palace" type="checkbox" className="form-check-input px-0" id="inputPalace"
+                        checked={detailRecord.palace ? detailRecord.palace : false} onChange={handleBooleanChange}></input>
+                    <label className="form-check-label" for="inputPalace">Palace/Castles/Fort</label>
+                </div>
+
+                <div className="form-group col-md-3">
+                    <input name="beach" type="checkbox" className="form-check-input px-0" id="inputBeach"
+                        checked={detailRecord.beach ? detailRecord.beach : false} onChange={handleBooleanChange}></input>
+                    <label className="form-check-label" for="inputBeach">Sea/Ocean/Beach</label>
                 </div>
 
                 <div className="form-group col-md-3">
                     <input name="river" type="checkbox" className="form-check-input px-0" id="inputRiver"
                         checked={detailRecord.river ? detailRecord.river : false} onChange={handleBooleanChange}></input>
-                    <label className="form-check-label" for="inputRiver">River/Lake</label>
+                    <label className="form-check-label" for="inputRiver">River/Lake/Water</label>
                 </div>
 
                 <div className="form-group col-md-3">
                     <input name="nature" type="checkbox" className="form-check-input px-0" id="inputNature"
                         checked={detailRecord.nature ? detailRecord.nature : false} onChange={handleBooleanChange}></input>
-                    <label className="form-check-label" for="inputNature">Natural Beauty</label>
+                    <label className="form-check-label" for="inputNature">Nature/Park/Forest</label>
+                </div>
+
+                <div className="form-group col-md-3">
+                    <input name="desert" type="checkbox" className="form-check-input px-0" id="inputDesert"
+                        checked={detailRecord.desert ? detailRecord.desert : false} onChange={handleBooleanChange}></input>
+                    <label className="form-check-label" for="inputDesert">Desert/Sand/Dunes</label>
                 </div>
 
                 <div className="form-group col-md-3">
                     <input name="sports" type="checkbox" className="form-check-input px-0" id="inputSports"
                         checked={detailRecord.sports ? detailRecord.sports : false} onChange={handleBooleanChange}></input>
                     <label className="form-check-label" for="inputSports">Sports/Recreation/Fun</label>
+                </div>
+
+                <div className="form-group col-md-3">
+                    <input name="religious" type="checkbox" className="form-check-input px-0" id="inputReligious"
+                        checked={detailRecord.religious ? detailRecord.religious : false} onChange={handleBooleanChange}></input>
+                    <label className="form-check-label" for="inputReligious">Religious/Pilgrimmage</label>
                 </div>
 
                 <div className="form-group col-md-3">

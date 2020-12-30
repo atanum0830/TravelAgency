@@ -18,12 +18,11 @@ export function NavBarComponent() {
 {/* 
                         <a className="nav-link disabled" href="home" tabIndex="-1" aria-disabled="true">Disabled</a>
  */}
-                        <NavDropdown title="Admin" id="nav-admin">
+                        <NavDropdown title="Manage" id="nav-admin">
                             <NavDropdown.Item eventKey="4.1" href="attractions"><i className="fas fa-archway"></i> Attractions</NavDropdown.Item>
-                            <NavDropdown.Item eventKey="4.2" href="tours"><i className="fas fa-plane-departure"></i> Tours</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item eventKey="4.3" href="customers"><i className="fas fa-user-friends"></i> Customers</NavDropdown.Item>
-                            <NavDropdown.Item eventKey="4.4" href="bookings"><i className="fas fa-passport"></i> Bookings</NavDropdown.Item>
+                            {/* <NavDropdown.Item eventKey="4.4" href="bookings"><i className="fas fa-passport"></i> Bookings</NavDropdown.Item> */}
                         </NavDropdown>
                     </div>
                 </div>

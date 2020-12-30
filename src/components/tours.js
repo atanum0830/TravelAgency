@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { Handler } from './handler';
 import { TourRec } from '../model/all-classes';
 import Pagination from './pagination';
-import PlacesList from './places-list';
+import DependsList from './depends-list';
 
 export function TourComponent(props) {
     console.log(props);
@@ -236,7 +236,7 @@ export function TourComponent(props) {
             </div>
 
             <div className="form-row col-md-6">
-                <PlacesList></PlacesList>
+                <DependsList></DependsList>
             </div>
             
             <button className="btn btn-primary" onClick={handleSubmit}>Save</button>
