@@ -5,6 +5,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import firebase from './services/firebase';
 import dataService from './services/data-service';
+import model from './model/model';
 import { AttractionComponent } from './components/attractions';
 import { BookingComponent } from './components/bookings';
 import { CustomerComponent } from './components/customers';
@@ -64,7 +65,8 @@ function App() {
 
   const loadTours = () => {
     console.log('loadTours called');
-    toursRef.orderBy('startDate').onSnapshot((querySnapshot) => {
+    const ref = model.user.isCustomer ? toursRef.where('startDate', '>', new Date()) : toursRef;
+    ref.orderBy('startDate').onSnapshot((querySnapshot) => {
       const documents = dataService.fetchSnapshotDocs(querySnapshot);
       const tours = documents.map(document => new TourRec(document));
       setTours(tours);

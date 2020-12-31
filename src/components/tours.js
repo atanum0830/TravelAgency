@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { Table, Card, Button, FormControl, InputGroup } from 'react-bootstrap';
+import { Table, Card, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { format } from 'date-fns';
 import { Handler } from './handler';
 import { TourRec } from '../model/all-classes';
 import Pagination from './pagination';
 import DependsList from './depends-list';
+import model from '../model/model';
 
 export function TourComponent(props) {
     console.log(props);
@@ -84,6 +85,14 @@ export function TourComponent(props) {
         setCollChanged(true);
     };
 
+    const handleReserveRecord = (record, index) => {
+
+    }
+
+    const handleShowRecord = (record, index) => {
+
+    }
+
     /**
      * SAVE/SUBMIT button Event handler
      */
@@ -138,16 +147,11 @@ export function TourComponent(props) {
     ** by transforming props.records array
     */
     const rows = pageRecords.map((record, index) => {
-        const row = (
+        const row = (model.user.isAdmin) ?
         <tr key={index}>
             <td>{format(record.startDate.toDate(), 'dd-MMM-yyyy')}</td>
             <td style={{maxWidth: "150px"}}>{record.name}</td>
             <td>
-                <i className="mx-2 fas fa-binoculars" style={{color: "MediumBlue"}} aria-hidden="true" 
-                    onClick={() => {
-                        handleEditRecord(record);
-                    }}
-                ></i>
                 <i className="mx-2 far fa-edit" style={{color: "Indigo"}} aria-hidden="true"
                     onClick={() => {
                         handleEditRecord(record);
@@ -160,7 +164,26 @@ export function TourComponent(props) {
                 ></i>
             </td>
         </tr>
-        );
+        :
+        <tr key={index}>
+            <td>{format(record.startDate.toDate(), 'dd-MMM-yyyy')}</td>
+            <td style={{maxWidth: "150px"}}>{record.name}</td>
+            <td>
+                <OverlayTrigger placement="left" overlay={ <Tooltip id="tipReserve"><strong>Book</strong> this tour</Tooltip> }>
+                    <Button variant="success" size="sm"><i className="fas fa-check"></i> Book</Button>
+                </OverlayTrigger>
+
+                <OverlayTrigger placement="top" overlay={ <Tooltip id="tipReserve"><strong>More Details</strong> about this tour</Tooltip> }>
+                    <i className="mx-1 fas fa-search-plus" onClick={() => { handleShowRecord(record, index); }}></i>
+                </OverlayTrigger>
+                
+                <OverlayTrigger placement="right" overlay={ <Tooltip id="tipReserve"><strong>Contact Us</strong> for help</Tooltip> }>
+                    <i className="mx-1 fas fa-phone-square"></i>
+                </OverlayTrigger>
+                
+            </td>
+        </tr>
+        ;
         return row;
     });
 
@@ -178,8 +201,10 @@ export function TourComponent(props) {
                         <th>Tour Date</th>
                         <th>Tour Name</th>
                         <th>
+                            { (model.user.isAdmin) ?                          
                             <button type="submit" className="btn btn-primary btn-sm" onClick={handleAddNewRecord}>
-                                <i className="fa fa-plus-circle" aria-hidden="true"></i> New Tour</button>
+                                <i className="fa fa-plus-circle" aria-hidden="true"></i> New Tour</button>: ''
+                            }
                         </th>
                     </tr>
                 </thead>
