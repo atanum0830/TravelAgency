@@ -13,14 +13,17 @@ import { HomeComponent } from './components/home';
 import { NavBarComponent } from './components/navigation';
 import { NoMatchComponent } from './components/no-match';
 import { TourComponent } from './components/tours';
-import { TourRec } from './model/all-classes';
+import { BookingRec, TourRec } from './model/all-classes';
 
 function App() {
+
+  ///// Firebase Firebase collection references ///////
   const toursRef = firebase.firestore().collection('tours');
   const bookingsRef = firebase.firestore().collection('bookings');
   const customersRef = firebase.firestore().collection('customers');
   const attractionsRef = firebase.firestore().collection('attractions');
 
+  ///// STATE MANAGEMENT Hooks //////
   const [tours, setTours] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -31,7 +34,15 @@ function App() {
   const [loadedAttractions, setLoadedAttractions] = useState(false);
   const [loadedCustomers, setLoadedCustomers] = useState(false);
 
-  // update={updateAttraction} remove={removeAttraction} add={addAttraction} />
+ 
+  ///// CRUD - Attractions /////
+  const loadAttractions = () => {
+    attractionsRef.orderBy('name').onSnapshot((querySnapshot) => {
+      const documents = dataService.fetchSnapshotDocs(querySnapshot);
+      setAttractions(documents);
+      setLoadedAttractions(true);
+    });
+  }
 
   const updateAttraction = (attraction) => {
     setLoadedAttractions(false);
@@ -46,6 +57,18 @@ function App() {
   const addAttraction = (attraction) => {
     setLoadedAttractions(false);
     dataService.insertRecord(attractionsRef, attraction);
+  }
+
+  ///// CRUD - Tours /////
+  const loadTours = () => {
+    console.log('loadTours called');
+    const ref = model.user.isCustomer ? toursRef.where('startDate', '>', new Date()) : toursRef;
+    ref.orderBy('startDate').onSnapshot((querySnapshot) => {
+      const documents = dataService.fetchSnapshotDocs(querySnapshot);
+      const tours = documents.map(document => new TourRec(document));
+      setTours(tours);
+      setLoadedTours(true);
+    });
   }
 
   const updateTour = (tour) => {
@@ -63,25 +86,35 @@ function App() {
     dataService.insertRecord(toursRef, tour);
   };
 
-  const loadTours = () => {
-    console.log('loadTours called');
-    const ref = model.user.isCustomer ? toursRef.where('startDate', '>', new Date()) : toursRef;
-    ref.orderBy('startDate').onSnapshot((querySnapshot) => {
-      const documents = dataService.fetchSnapshotDocs(querySnapshot);
-      const tours = documents.map(document => new TourRec(document));
-      setTours(tours);
-      setLoadedTours(true);
-    });
-  }
-
+  ///// CRUD - Bookings /////
   const loadBookings = () => {
-    bookingsRef.onSnapshot((querySnapshot) => {
+    // const ref = model.user.isCustomer ? 
+    //       bookingsRef.where('status', 'in', ['CONFIRMED', 'OPEN']).where('customerId', '==', model.user.customerId) : bookingsRef;
+    const ref = bookingsRef;
+    ref.onSnapshot((querySnapshot) => {
       const documents = dataService.fetchSnapshotDocs(querySnapshot);
-      setBookings(documents);
+      const bookings = documents.map(document => new BookingRec(document));
+      setBookings(bookings);
       setLoadedBookings(true);
     });
   }
 
+  const removeBooking = (booking) => {
+    setLoadedTours(false);
+    dataService.deleteRecord(toursRef, booking);
+  };
+
+  const addBooking = (booking) => {
+    setLoadedTours(false);
+    dataService.insertRecord(toursRef, booking);
+  };
+
+  const updateBooking = (booking) => {
+    setLoadedTours(false);
+    dataService.updateRecord(toursRef, booking);
+  };
+
+  ///// CRUD - Customers /////
   const loadCustomers = () => {
     customersRef.onSnapshot((querySnapshot) => {
       const documents = dataService.fetchSnapshotDocs(querySnapshot);
@@ -89,14 +122,7 @@ function App() {
     });
   }
 
-  const loadAttractions = () => {
-    attractionsRef.orderBy('name').onSnapshot((querySnapshot) => {
-      const documents = dataService.fetchSnapshotDocs(querySnapshot);
-      setAttractions(documents);
-      setLoadedAttractions(true);
-    });
-  }
-
+  ///// LIFE CYCLE hooks /////
   useEffect(() => {
     loadAttractions();
     loadTours();
@@ -118,7 +144,10 @@ function App() {
               <TourComponent records={tours} loaded={loadedTours} depRecords={attractions}
                 update={updateTour} remove={removeTour} add={addTour} />
             )} />
-          <Route path='/bookings' render={(props) => <BookingComponent bookings={bookings} loaded={loadedBookings}/>} />
+          <Route path='/bookings' render={(props) => (
+              <BookingComponent records={bookings} loaded={loadedBookings}
+                update={updateBooking} remove={removeBooking} add={addBooking}/>
+            )} />
           <Route path='/customers' render={(props) => <CustomerComponent customers={customers} />} />
           <Route component={NoMatchComponent} />
         </Switch>

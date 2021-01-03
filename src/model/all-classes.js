@@ -85,9 +85,9 @@ export class User {
         this.email = rec.hasOwnProperty('email') ? rec.email : undefined;
         this.mobileNo = rec.hasOwnProperty('mobileNo') ? rec.mobileNo : undefined;
         this.address = rec.hasOwnProperty('address') ? rec.address : undefined;
-        this.gender = rec.hasOwnProperty('gender') ? rec.gender : undefined;
-        this.ageGroup = rec.hasOwnProperty('ageGroup') ? rec.ageGroup : undefined;
-        this.birthDate = rec.hasOwnProperty('birthDate') ? rec.birthDate : undefined;
+        // this.gender = rec.hasOwnProperty('gender') ? rec.gender : undefined;
+        // this.ageGroup = rec.hasOwnProperty('ageGroup') ? rec.ageGroup : undefined;
+        // this.birthDate = rec.hasOwnProperty('birthDate') ? rec.birthDate : undefined;
         this.userType = rec.hasOwnProperty('userType') ? rec.userType : undefined;
     }
 
@@ -98,9 +98,6 @@ export class User {
     email;
     mobileNo;
     address;
-    gender;
-    ageGroup;
-    birthDate;
     userType;
 
     get isAdmin() {
@@ -125,4 +122,88 @@ export class User {
     get isMale() {
         return this.gender === Gender.MALE;
     }
+}
+
+export class BookStatus {
+    static CONFIRMED = 'CONFIRMED';
+    static OPEN = 'OPEN';
+    static CLOSED = 'CLOSED';
+    static EXPIRED = 'EXPIRED';
+}
+
+export class CardType {
+    static VISA = 'VISA';
+    static MASTERCARD = 'MASTERCARD';
+    static AMEX = 'AMEX';
+    static DISCOVER = 'DISCOVER';
+    static DINERS = 'DINERS';
+}
+
+export class PaymentMode {
+    static NONE = 'NONE';
+    static CASH = 'CASH';
+    static CHECK = 'CHECK';
+    static CREDIT = 'CREDIT';
+    static DEBIT = 'DEBIT';
+    static PAYPAL = 'PAYPAL';
+    static ZELLE = 'ZELLE';
+    static VENMO = 'VENMO';
+}
+
+export class BookingRec {
+    constructor(rec) {
+        this.bookingRefNo = rec.hasOwnProperty('bookingRefNo') ? rec.bookingRefNo : undefined;
+        this.customerId = rec.hasOwnProperty('customerId') ? rec.customerId : undefined;
+        this.tourId = rec.hasOwnProperty('tourId') ? rec.tourId : undefined;
+        this.bookingDate = rec.hasOwnProperty('bookingDate') ? rec.bookingDate : undefined;
+        this.confirmDate = rec.hasOwnProperty('confirmDate') ? rec.confirmDate : undefined;
+        this.billAmount = rec.hasOwnProperty('billAmount') ? rec.billAmount : 0;
+        this.status = rec.hasOwnProperty('status') ? rec.status : BookStatus.OPEN;
+        this.isPaid = rec.hasOwnProperty('isPaid') ? rec.isPaid : false;
+        this.paidAmount = rec.hasOwnProperty('paidAmount') ? rec.paidAmount : 0;
+        this.paymentMode = rec.hasOwnProperty('paymentMode') ? rec.paymentMode : PaymentMode.CASH;
+        this.paymentRefNo = rec.hasOwnProperty('paymentRefNo') ? rec.paymentRefNo : undefined;
+        this.cardType = rec.hasOwnProperty('cardType') ? rec.cardType : CardType.NONE;
+        this.cardExpDate = rec.hasOwnProperty('cardExpDate') ? rec.cardExpDate : undefined;
+        this.notes = rec.hasOwnProperty('notes') ? rec.notes : undefined;
+        this.travellers = rec.hasOwnProperty('travellers') ? rec.travellers : [];
+    }
+
+    bookingRefNo;
+    customerId;
+    tourId;
+    bookingDate;
+    confirmDate;
+    billAmount;
+    status;
+    isPaid;
+    paidAmount;
+    paymentMode;
+    paymentRefNo;
+    cardType;
+    cardExpDate;
+    notes;
+    travellers;
+}
+
+export class MealPref {
+    static HINDUVEG = 'HINDUVEG';
+    static NONVEG = 'NONVEG';
+    static JAIN = 'JAIN';
+    static MUSLIM = 'MUSLIM';
+}
+
+export class Traveller {
+        // this.gender = rec.hasOwnProperty('gender') ? rec.gender : undefined;
+        // this.ageGroup = rec.hasOwnProperty('ageGroup') ? rec.ageGroup : undefined;
+        // this.birthDate = rec.hasOwnProperty('birthDate') ? rec.birthDate : undefined;
+    firstName;
+    lastName;
+    email;
+    mobileNo;
+    address;
+    gender;
+    ageGroup;
+    birthDate;
+    mealPref;
 }

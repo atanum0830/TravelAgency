@@ -219,10 +219,6 @@ export function AttractionComponent(props) {
 
 
                 <div className="form-floating col-md-12">
-{/* 
-                    <input name="description" type="text" className="form-control" id="inputDescription"
-                        value={detailRecord.description ? detailRecord.description : ""} onChange={handleTextChange}></input>
- */}
                     <label for="inputDescription">Attraction Highlights</label>
                     <textarea name="description" class="form-control" style={{height: "100px"}} placeholder="Provide details of the attraction" id="inputDescription"
                         value={detailRecord.description ? detailRecord.description : ""} onChange={handleTextChange}></textarea>
